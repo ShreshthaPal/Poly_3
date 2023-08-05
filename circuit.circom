@@ -1,0 +1,68 @@
+pragma circom 2.0.0;
+
+/*This circuit template checks that C is the multiplication of A and B.*/  
+
+template circom1 () {  
+
+ // signal inputs
+
+   signal input A;
+   signal input B;
+
+// signals from gates
+
+   signal X;
+   signal Y;
+
+// final signal output
+   signal output Q;
+
+// component gates used to create custom circuit
+
+   component andGate = AND();
+   component notgate = NOT();
+   component norGate = NOR();
+
+// circuit logic
+
+   andGate.A <== A;
+   andGate.B <== B;
+   X <== andGate.out;
+
+   notgate.in <== B;
+   Y <== notgate.out;
+
+   norGate.X <== X;
+   norGate.Y <== Y;
+   Q <== norGate.out;
+
+}
+// template for AND
+
+    template AND() {
+    signal input A;
+    signal input B;
+    signal output out;
+
+    out <== A*B;
+}
+// template for NOT
+
+    template NOT() {
+    signal input in;
+    signal output out;
+
+    out <== 1 + in - 2*in;
+}
+// template for NOR
+
+    template NOR() {
+    signal input X;
+    signal input Y;
+    signal output out;
+
+    out <== X*Y + 1 - X - Y;
+
+}
+
+component main = circom1();
